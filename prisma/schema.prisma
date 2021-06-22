@@ -11,7 +11,7 @@ generator client {
 }
 
 model Favorite {
-  gistId String
+  gistId String @unique
   favorited Boolean @default(false)
 
   @@id([gistId])

@@ -16,6 +16,15 @@ const typeDefs = gql`
         gistsById(id: String!): Gist
     }
 
+    type Mutation {
+        favoriteGist(gistId: String!, favorited: Boolean): Favorite
+    }
+
+    type Favorite {
+        gistId: String!
+        favorited: Boolean!
+    }
+
     type Gist {
         url: String!
         id: String!
@@ -71,6 +80,25 @@ const resolvers = {
     Query: {
         gistsByUsername: (_, { username }, { dataSources }) => dataSources.githubAPI.getGistsByUser(username),
         gistsById: (_, { id }, { dataSources }) => dataSources.githubAPI.getGistById(id),
+    },
+    Mutation: {
+        favoriteGist: async (_, { gistId, favorited }, { dataSources }) => {
+            // update or insert into db
+            const gist = await prisma().favorite.upsert({
+                where: {
+                    gistId,
+                },
+                create: {
+                    gistId,
+                    favorited,
+                },
+                update: {
+                    favorited,
+                },
+            });
+
+            return gist;
+        },
     },
 };
 
