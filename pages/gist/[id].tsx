@@ -11,6 +11,7 @@ import { useGistByIdQuery, useToggleFavoriteGistMutation } from '../../gen/graph
 import { useRouter } from 'next/router';
 import FileTable from '../../components/table/FileTable';
 import { MdFavorite, MdFavoriteBorder } from 'react-icons/md';
+import { FavoritesQuery } from '../favorites';
 const useStyles = makeStyles((theme: Theme) => ({
     description: {
         maxWidth: '80ch',
@@ -63,7 +64,9 @@ export default function Gist(): ReactElement {
     const classes = useStyles();
 
     const { data, error, refetch } = useGistByIdQuery({ variables: { id: `${router.query.id}` } });
-    const [toggleFavorite, { loading }] = useToggleFavoriteGistMutation();
+    const [toggleFavorite, { loading }] = useToggleFavoriteGistMutation({
+        refetchQueries: [{ query: FavoritesQuery }],
+    });
 
     const handleFavoriteClick = async () => {
         const gistId = `${router.query.id}`;

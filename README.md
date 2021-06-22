@@ -75,3 +75,14 @@ Requirements by page
 -   Realized I needed a database and a way to write to it so I threw in Postgres and Docker for ease of startup
 -   Refreshed on how to make a REST Data source
 -   Made REST resource then a quick and dirty graphql api using that service
+-   Create queries to get list of gists
+-   Decided to switch to frontend because I figured the favoriting was going to be a little more thought
+-   Finished up a search example in the frontend (had to add in some of my favorite tooling to make the Developer experience fun)
+-   Realized gist files were keys with a file instead of the file array I was expecting. I reworked the RESTDataSource to make that fit my situation
+-   Worked on the gist page renderer showing files in a table
+-   Realized I was already over an hour so I tried to cut corners to keep it under 2 hours.
+-   Got a favorite mutation wired up using prisma orm and javascript
+-   Proved it was working in the frontend for favoriting/unfavoriting
+-   Had about 20 minutes left to work the favorites page
+-   Realized I wouldn't have time to work on relating gists back to favorited and vice versa so I just got the favorited page working enough to show it lists all the favorites and can navigate to each gist by id
+-   At this point I realized if I had more time I would try to go the apollo federated route because this github gist api can be independent from the favorited service and could just be an extension of the existing service. My stitching/ entity extension knowledge wasn't solid enough for a 2 hour coding challenge :\ but if I had more time I'd figure it out :)
