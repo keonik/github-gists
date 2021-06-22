@@ -92,6 +92,23 @@ export type QueryGistsByIdArgs = {
 };
 
 
+export type GistByIdQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type GistByIdQuery = (
+  { __typename?: 'Query' }
+  & { gistsById?: Maybe<(
+    { __typename?: 'Gist' }
+    & Pick<Gist, 'created_at' | 'updated_at' | 'description' | 'html_url'>
+    & { files?: Maybe<Array<Maybe<(
+      { __typename?: 'File' }
+      & Pick<File, 'filename' | 'type' | 'language' | 'raw_url' | 'size'>
+    )>>> }
+  )> }
+);
+
 export type GistsByUsernameQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
@@ -106,6 +123,51 @@ export type GistsByUsernameQuery = (
 );
 
 
+export const GistByIdDocument = gql`
+    query GistById($id: String!) {
+  gistsById(id: $id) {
+    created_at
+    updated_at
+    description
+    html_url
+    files {
+      filename
+      type
+      language
+      raw_url
+      size
+    }
+  }
+}
+    `;
+
+/**
+ * __useGistByIdQuery__
+ *
+ * To run a query within a React component, call `useGistByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGistByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGistByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGistByIdQuery(baseOptions: Apollo.QueryHookOptions<GistByIdQuery, GistByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GistByIdQuery, GistByIdQueryVariables>(GistByIdDocument, options);
+      }
+export function useGistByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GistByIdQuery, GistByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GistByIdQuery, GistByIdQueryVariables>(GistByIdDocument, options);
+        }
+export type GistByIdQueryHookResult = ReturnType<typeof useGistByIdQuery>;
+export type GistByIdLazyQueryHookResult = ReturnType<typeof useGistByIdLazyQuery>;
+export type GistByIdQueryResult = Apollo.QueryResult<GistByIdQuery, GistByIdQueryVariables>;
 export const GistsByUsernameDocument = gql`
     query GistsByUsername($username: String!) {
   gistsByUsername(username: $username) {

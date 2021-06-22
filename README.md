@@ -55,7 +55,7 @@ Requirements by page
 
 -   [x] Text box to enter username
 -   [x] Debounced username search to list public gists (description and date at minimum)
--   [ ] Navigate to gist detail page after clicking a public gist
+-   [x] Navigate to gist detail page after clicking a public gist
 
 ### Gist detail page
 

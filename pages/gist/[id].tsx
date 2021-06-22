@@ -6,6 +6,9 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import { Tool, tools } from '../../lib/tools';
 import { ReactElement } from 'react';
 import Layout from '../../components/layout';
+import { gql } from '@apollo/client';
+import { useGistByIdQuery } from '../../gen/graphql-types';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme: Theme) => ({
     description: {
@@ -24,54 +27,57 @@ interface Props {
     tool?: Tool;
 }
 
-export default function ToolInfo({ tool }: Props): ReactElement {
+const queryGistById = gql`
+    query GistById($id: String!) {
+        gistsById(id: $id) {
+            created_at
+            updated_at
+            description
+            html_url
+            files {
+                filename
+                type
+                language
+                raw_url
+                size
+            }
+        }
+    }
+`;
+
+export default function Gist(): ReactElement {
+    const router = useRouter();
     const classes = useStyles();
 
-    if (!tool) {
-        return (
-            <Grid container spacing={4} className={classes.root}>
-                <Grid item xs={12}>
-                    <Breadcrumbs aria-label="breadcrumb">
-                        <Link href="/" passHref>
-                            Home
-                        </Link>
-                    </Breadcrumbs>
-                </Grid>
-                <Grid item xs={12} container>
-                    <Typography variant="h3" component="p">
-                        Tool not found.
-                    </Typography>
-                </Grid>
-            </Grid>
-        );
-    }
+    const { data } = useGistByIdQuery({ variables: { id: `${router.query.id}` } });
+
     return (
         <>
-            <Layout title={`${tool.name} | Next.js example`}>
+            <Layout title={`Gist`}>
                 <Grid container spacing={4} className={classes.root}>
                     <Grid item xs={12}>
                         <Breadcrumbs aria-label="breadcrumb">
                             <Link href="/" passHref>
                                 Home
                             </Link>
-                            <Typography color="textPrimary">{tool.name}</Typography>
+                            <Typography color="textPrimary">{data?.gistsById?.description}</Typography>
                         </Breadcrumbs>
                     </Grid>
                     <Grid item xs={12} container justify="center" alignItems="center">
                         {/* NextJS Image optimization example. Props are src(any file under the public dir), width, and height */}
-                        {tool.image && <Image {...tool.image} data-testid="image" aria-hidden="true" />}
+                        {/* {tool.image && <Image {...tool.image} data-testid="image" aria-hidden="true" />}
                         <Typography variant="h2" className={classes.title}>
                             {tool.name}
-                        </Typography>
+                        </Typography> */}
                     </Grid>
                     <Grid item xs={12} container justify="center">
-                        <Typography variant="body1" className={classes.description}>
+                        {/* <Typography variant="body1" className={classes.description}>
                             {tool.description}
-                        </Typography>
+                        </Typography> */}
                     </Grid>
                     <Grid item xs={12} container justify="center">
-                        <Button variant="contained" href={tool.link} color="primary">
-                            Visit {tool.name} documentation
+                        <Button variant="contained" href={data?.gistsById?.html_url} color="primary">
+                            Visit gist
                         </Button>
                     </Grid>
                 </Grid>
@@ -79,23 +85,3 @@ export default function ToolInfo({ tool }: Props): ReactElement {
         </>
     );
 }
-
-// https://nextjs.org/docs/basic-features/data-fetching#getstaticpaths-static-generation
-export async function getStaticPaths() {
-    return {
-        paths: tools.map((tool) => ({ params: { name: tool.name } })),
-        fallback: false,
-    };
-}
-
-export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
-    if (params?.name) {
-        const tool = tools.find(({ name: toolName }) => toolName === params.name);
-        return {
-            props: { tool },
-        };
-    }
-    return {
-        props: {},
-    };
-};
