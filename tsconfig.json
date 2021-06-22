@@ -19,5 +19,5 @@
         "target": "esnext"
     },
     "exclude": ["node_modules"],
-    "include": ["**/*.ts", "**/*.tsx", "setupTests.js", "setupTests.js"]
+    "include": ["**/*.ts", "**/*.tsx", "setupTests.js", "setupTests.js", "services/Github.js"]
 }

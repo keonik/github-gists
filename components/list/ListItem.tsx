@@ -1,8 +1,5 @@
-import Image from '../Image';
 import {
     ListItem as MUIListItem,
-    ListItemAvatar,
-    Avatar,
     ListItemText,
     Grid,
     Typography,
@@ -11,7 +8,7 @@ import {
     Theme,
 } from '@material-ui/core';
 import Link from '../link/Link';
-import { Image as ImageType } from '../../pages/index';
+import dayjs from 'dayjs';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -32,27 +29,34 @@ export type Link = {
 };
 
 type Props = {
-    name: string;
-    image: ImageType | undefined;
-    link: Link;
+    id: string;
+    description: string;
+    created_at: string;
+    updated_at: string;
 };
 
-export default function ListItem({ name, image, link }: Props) {
+export default function ListItem({ id, description, created_at, updated_at }: Props) {
     const classes = useStyles();
+    const link = { href: '/gist/[id]', as: `/gist/${id}`, label: 'Learn More' };
     return (
         <MUIListItem divider>
             <Grid container alignItems="center">
-                <ListItemAvatar>
-                    <Avatar alt={name} className={classes.avatar}>
-                        {/* NextJS Image optimization example. Props are src(any file under the public dir), width, and height */}
-                        <Image image={image} name={name} />
-                    </Avatar>
-                </ListItemAvatar>
                 <ListItemText>
-                    <Typography variant="body1">{name}</Typography>
+                    <Typography variant="body1">
+                        <strong>Description:</strong>
+                        {description}
+                    </Typography>
+                    <Typography variant="body1">
+                        <strong>Created:</strong>
+                        {dayjs(created_at).format('MMM DD, YYYY')}
+                    </Typography>
+                    <Typography variant="body1">
+                        <strong>Last Updated:</strong>
+                        {dayjs(updated_at).format('MMM DD, YYYY')}
+                    </Typography>
                 </ListItemText>
                 <Grid container item xs={12} md={3} className={classes.info} justify="flex-end" alignItems="center">
-                    <Link href={link.href} as={link?.as} label={link.label} />
+                    <Link {...link} />
                 </Grid>
             </Grid>
         </MUIListItem>

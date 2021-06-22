@@ -1,0 +1,11 @@
+version: '3'
+services:
+    db:
+        image: 'postgres:11'
+        restart: always
+        ports:
+            - '6543:5432'
+        environment:
+            - POSTGRES_PASSWORD=gist-password
+            - POSTGRES_USER=gist
+            - POSTGRES_DB=gists-db

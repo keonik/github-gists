@@ -3,11 +3,17 @@ import { ThemeProvider } from '@material-ui/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../lib/theme';
 import React, { useEffect } from 'react';
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
 // Determines if we are running on server or in client.
 const isServerSideRendered = () => {
     return typeof window === 'undefined';
 };
+
+export const client = new ApolloClient({
+    uri: '/api/graphql',
+    cache: new InMemoryCache(),
+});
 
 /**
  * Accessibility tool - outputs to devtools console on dev only and client-side only.
@@ -32,9 +38,11 @@ const App = ({ Component, pageProps }: AppProps) => {
 
     return (
         <ThemeProvider theme={theme}>
-            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            <CssBaseline />
-            <Component {...pageProps} />
+            <ApolloProvider client={client}>
+                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                <CssBaseline />
+                <Component {...pageProps} />
+            </ApolloProvider>
         </ThemeProvider>
     );
 };
