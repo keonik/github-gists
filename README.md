@@ -63,3 +63,15 @@ Requirements by page
 -   [ ] Button/Icon to toggle favoriting/unfavoriting a gist
 -   [ ] Breadcrumb/Nav to return to home page
 -   [ ] Nav with homepage and favorited gists
+
+## Assumptions made
+
+-   I couldn't find a way to get gists by username without going through the user/{id}/gists endpoint. Spent 30 minutes figuring out you can't pass username to the api/gists endpoint :/
+-
+
+## How this actually went down
+
+-   Parsed through requirements to make sure I understood them
+-   Realized I needed a database and a way to write to it so I threw in Postgres and Docker for ease of startup
+-   Refreshed on how to make a REST Data source
+-   Made REST resource then a quick and dirty graphql api using that service

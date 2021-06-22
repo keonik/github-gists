@@ -5,6 +5,8 @@
     "dependencies": {
         "@material-ui/core": "^4.11.4",
         "@prisma/client": "^2.25.0",
+        "apollo-datasource-rest": "^0.14.0",
+        "apollo-server-micro": "^2.25.1",
         "next": "^10.2.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2"
@@ -14,7 +16,7 @@
         "dev": "next -p 3001",
         "format": "prettier --write . && eslint --fix .",
         "lint": "eslint .",
-        "start": "next start",
+        "start": "prisma migrate deploy && next start",
         "test": "jest",
         "type-check": "tsc",
         "quality": "npm run type-check && npm run lint && npm run test"

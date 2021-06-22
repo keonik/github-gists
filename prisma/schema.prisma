@@ -10,3 +10,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model Favorite {
+  gistId String
+  favorited Boolean @default(false)
+
+  @@id([gistId])
+}
