@@ -60,7 +60,7 @@ Requirements by page
 ### Gist detail page
 
 -   [x] List all files of the gist
--   [ ] Button/Icon to toggle favoriting/unfavoriting a gist
+-   [x] Button/Icon to toggle favoriting/unfavoriting a gist
 -   [x] Breadcrumb/Nav to return to home page
 -   [ ] Nav with homepage and favorited gists
 

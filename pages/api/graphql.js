@@ -14,6 +14,7 @@ const typeDefs = gql`
     type Query {
         gistsByUsername(username: String!): [Gist]
         gistsById(id: String!): Gist
+        favoritedGistById(id: String!): Favorite
     }
 
     type Mutation {
@@ -80,6 +81,10 @@ const resolvers = {
     Query: {
         gistsByUsername: (_, { username }, { dataSources }) => dataSources.githubAPI.getGistsByUser(username),
         gistsById: (_, { id }, { dataSources }) => dataSources.githubAPI.getGistById(id),
+        favoritedGistById: async (_, { id }) => {
+            const gist = await prisma().favorite.findUnique({ where: { gistId: id } });
+            return gist;
+        },
     },
     Mutation: {
         favoriteGist: async (_, { gistId, favorited }, { dataSources }) => {

@@ -22,6 +22,12 @@ export enum CacheControlScope {
   Private = 'PRIVATE'
 }
 
+export type Favorite = {
+  __typename?: 'Favorite';
+  gistId: Scalars['String'];
+  favorited: Scalars['Boolean'];
+};
+
 export type File = {
   __typename?: 'File';
   filename: Scalars['String'];
@@ -53,6 +59,17 @@ export type Gist = {
   files?: Maybe<Array<Maybe<File>>>;
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  favoriteGist?: Maybe<Favorite>;
+};
+
+
+export type MutationFavoriteGistArgs = {
+  gistId: Scalars['String'];
+  favorited?: Maybe<Scalars['Boolean']>;
+};
+
 export type Owner = {
   __typename?: 'Owner';
   login?: Maybe<Scalars['String']>;
@@ -79,6 +96,7 @@ export type Query = {
   __typename?: 'Query';
   gistsByUsername?: Maybe<Array<Maybe<Gist>>>;
   gistsById?: Maybe<Gist>;
+  favoritedGistById?: Maybe<Favorite>;
 };
 
 
@@ -88,6 +106,11 @@ export type QueryGistsByUsernameArgs = {
 
 
 export type QueryGistsByIdArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryFavoritedGistByIdArgs = {
   id: Scalars['String'];
 };
 
@@ -106,6 +129,23 @@ export type GistByIdQuery = (
       { __typename?: 'File' }
       & Pick<File, 'filename' | 'type' | 'language' | 'raw_url' | 'size'>
     )>>> }
+  )>, favoritedGistById?: Maybe<(
+    { __typename?: 'Favorite' }
+    & Pick<Favorite, 'favorited'>
+  )> }
+);
+
+export type ToggleFavoriteGistMutationVariables = Exact<{
+  gistId: Scalars['String'];
+  favorited?: Maybe<Scalars['Boolean']>;
+}>;
+
+
+export type ToggleFavoriteGistMutation = (
+  { __typename?: 'Mutation' }
+  & { favoriteGist?: Maybe<(
+    { __typename?: 'Favorite' }
+    & Pick<Favorite, 'gistId' | 'favorited'>
   )> }
 );
 
@@ -138,6 +178,9 @@ export const GistByIdDocument = gql`
       size
     }
   }
+  favoritedGistById(id: $id) {
+    favorited
+  }
 }
     `;
 
@@ -168,6 +211,41 @@ export function useGistByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GistByIdQueryHookResult = ReturnType<typeof useGistByIdQuery>;
 export type GistByIdLazyQueryHookResult = ReturnType<typeof useGistByIdLazyQuery>;
 export type GistByIdQueryResult = Apollo.QueryResult<GistByIdQuery, GistByIdQueryVariables>;
+export const ToggleFavoriteGistDocument = gql`
+    mutation ToggleFavoriteGist($gistId: String!, $favorited: Boolean) {
+  favoriteGist(gistId: $gistId, favorited: $favorited) {
+    gistId
+    favorited
+  }
+}
+    `;
+export type ToggleFavoriteGistMutationFn = Apollo.MutationFunction<ToggleFavoriteGistMutation, ToggleFavoriteGistMutationVariables>;
+
+/**
+ * __useToggleFavoriteGistMutation__
+ *
+ * To run a mutation, you first call `useToggleFavoriteGistMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useToggleFavoriteGistMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [toggleFavoriteGistMutation, { data, loading, error }] = useToggleFavoriteGistMutation({
+ *   variables: {
+ *      gistId: // value for 'gistId'
+ *      favorited: // value for 'favorited'
+ *   },
+ * });
+ */
+export function useToggleFavoriteGistMutation(baseOptions?: Apollo.MutationHookOptions<ToggleFavoriteGistMutation, ToggleFavoriteGistMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ToggleFavoriteGistMutation, ToggleFavoriteGistMutationVariables>(ToggleFavoriteGistDocument, options);
+      }
+export type ToggleFavoriteGistMutationHookResult = ReturnType<typeof useToggleFavoriteGistMutation>;
+export type ToggleFavoriteGistMutationResult = Apollo.MutationResult<ToggleFavoriteGistMutation>;
+export type ToggleFavoriteGistMutationOptions = Apollo.BaseMutationOptions<ToggleFavoriteGistMutation, ToggleFavoriteGistMutationVariables>;
 export const GistsByUsernameDocument = gql`
     query GistsByUsername($username: String!) {
   gistsByUsername(username: $username) {
