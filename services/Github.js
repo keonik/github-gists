@@ -10,12 +10,15 @@ export default class Github extends RESTDataSource {
     // https://docs.github.com/en/rest/reference/users#get-contextual-information-for-a-user
     async getGistsByUser(username) {
         const response = await this.get(`users/${username}/gists`);
-        return response;
+        // remove file key and make files iterable
+        return response.map(({ files, ...gist }) => ({ ...gist, files: Object.values(files).map((file) => file) }));
     }
 
     // https://docs.github.com/en/rest/reference/gists#get-a-gist
     async getGistById(id) {
         const response = await this.get(`gists/${id}`);
-        return response;
+        const { files, ...gist } = response;
+        // remove file key and make files iterable
+        return { ...gist, files: Object.values(files) };
     }
 }
