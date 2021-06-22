@@ -44,8 +44,8 @@ Prequisites
 
 -   [x] Query gists (username)
 -   [x] Query gist (ID)
--   [ ] Mutation favorite a gist (ID)
--   [ ] Query favorited gists
+-   [x] Mutation favorite a gist (ID)
+-   [x] Query favorited gists
 
 ## UI Requirements
 
@@ -62,7 +62,7 @@ Requirements by page
 -   [x] List all files of the gist
 -   [x] Button/Icon to toggle favoriting/unfavoriting a gist
 -   [x] Breadcrumb/Nav to return to home page
--   [ ] Nav with homepage and favorited gists
+-   [x] Nav with homepage and favorited gists
 
 ## Assumptions made
 

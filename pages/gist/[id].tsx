@@ -62,7 +62,7 @@ export default function Gist(): ReactElement {
     const router = useRouter();
     const classes = useStyles();
 
-    const { data, refetch } = useGistByIdQuery({ variables: { id: `${router.query.id}` } });
+    const { data, error, refetch } = useGistByIdQuery({ variables: { id: `${router.query.id}` } });
     const [toggleFavorite, { loading }] = useToggleFavoriteGistMutation();
 
     const handleFavoriteClick = async () => {
@@ -88,6 +88,11 @@ export default function Gist(): ReactElement {
                             {data?.favoritedGistById?.favorited ? <MdFavorite /> : <MdFavoriteBorder />}
                         </IconButton>
                     </Grid>
+                    {error && (
+                        <Typography variant="h6" component="h4" color="error">
+                            {error.message}
+                        </Typography>
+                    )}
                     <Grid item xs={12} container justify="center" alignItems="center">
                         <FileTable files={data?.gistsById?.files} />
                     </Grid>

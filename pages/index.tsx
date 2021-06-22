@@ -46,16 +46,14 @@ const queryGistsByUsername = gql`
 export default function Home({ tools }: Props) {
     const classes = useStyles();
 
-    const [loadGists, { data }] = useGistsByUsernameLazyQuery();
+    const [loadGists, { data, error }] = useGistsByUsernameLazyQuery();
 
     const changeHandler = async (event: { target: { value: any } }) => {
         loadGists({ variables: { username: event.target.value } });
     };
 
     // quick debounce example https://dmitripavlutin.com/react-throttle-debounce/
-    const debouncedChangeHandler = useCallback(debounce(changeHandler, 300), []);
-
-    console.log({ data });
+    const debouncedChangeHandler = useCallback(debounce(changeHandler, 500), []);
 
     return (
         <>
@@ -63,18 +61,19 @@ export default function Home({ tools }: Props) {
                 <Grid container spacing={4} direction="column" className={classes.root}>
                     <Grid item container spacing={4} direction="column" xs={12} alignItems="center">
                         <Grid container item alignContent="stretch" justify="center" direction="column">
-                            <Typography variant="h5" component="h2">
-                                Github Gists
-                            </Typography>
-
                             <TextField
                                 id="outlined-basic"
-                                label="Search for github username"
+                                label="Search for gists by github username"
                                 placeholder="keonik"
                                 variant="outlined"
                                 onChange={debouncedChangeHandler}
                             />
                         </Grid>
+                        {error && (
+                            <Typography variant="h6" component="h4" color="error">
+                                {error.message}
+                            </Typography>
+                        )}
                         <Grid item container justify="center">
                             <List aria-label={tools.join(', ')} className={classes.list}>
                                 {data?.gistsByUsername?.map((gist) => {

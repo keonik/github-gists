@@ -65,10 +65,18 @@ const THEME: ThemeOptions = {
             fontWeight: 400,
         },
     },
+    overrides: {
+        MuiLink: {
+            root: {
+                color: '#d0df63',
+            },
+        },
+    },
     palette: {
+        type: 'dark',
         primary: {
             light: '#d0df63',
-            main: '#016848',
+            main: '#d0df63',
             dark: '#003b21',
         },
         secondary: {

@@ -97,6 +97,7 @@ export type Query = {
   gistsByUsername?: Maybe<Array<Maybe<Gist>>>;
   gistsById?: Maybe<Gist>;
   favoritedGistById?: Maybe<Favorite>;
+  favorites?: Maybe<Array<Favorite>>;
 };
 
 
@@ -114,6 +115,17 @@ export type QueryFavoritedGistByIdArgs = {
   id: Scalars['String'];
 };
 
+
+export type FavoritesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FavoritesQuery = (
+  { __typename?: 'Query' }
+  & { favorites?: Maybe<Array<(
+    { __typename?: 'Favorite' }
+    & Pick<Favorite, 'gistId'>
+  )>> }
+);
 
 export type GistByIdQueryVariables = Exact<{
   id: Scalars['String'];
@@ -163,6 +175,40 @@ export type GistsByUsernameQuery = (
 );
 
 
+export const FavoritesDocument = gql`
+    query Favorites {
+  favorites {
+    gistId
+  }
+}
+    `;
+
+/**
+ * __useFavoritesQuery__
+ *
+ * To run a query within a React component, call `useFavoritesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFavoritesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFavoritesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFavoritesQuery(baseOptions?: Apollo.QueryHookOptions<FavoritesQuery, FavoritesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FavoritesQuery, FavoritesQueryVariables>(FavoritesDocument, options);
+      }
+export function useFavoritesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FavoritesQuery, FavoritesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FavoritesQuery, FavoritesQueryVariables>(FavoritesDocument, options);
+        }
+export type FavoritesQueryHookResult = ReturnType<typeof useFavoritesQuery>;
+export type FavoritesLazyQueryHookResult = ReturnType<typeof useFavoritesLazyQuery>;
+export type FavoritesQueryResult = Apollo.QueryResult<FavoritesQuery, FavoritesQueryVariables>;
 export const GistByIdDocument = gql`
     query GistById($id: String!) {
   gistsById(id: $id) {

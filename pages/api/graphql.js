@@ -15,6 +15,7 @@ const typeDefs = gql`
         gistsByUsername(username: String!): [Gist]
         gistsById(id: String!): Gist
         favoritedGistById(id: String!): Favorite
+        favorites: [Favorite!]
     }
 
     type Mutation {
@@ -79,11 +80,16 @@ const typeDefs = gql`
 
 const resolvers = {
     Query: {
-        gistsByUsername: (_, { username }, { dataSources }) => dataSources.githubAPI.getGistsByUser(username),
+        gistsByUsername: (_, { username }, { dataSources }) =>
+            dataSources.githubAPI.getGistsByUser(`${username}`.toLowerCase()),
         gistsById: (_, { id }, { dataSources }) => dataSources.githubAPI.getGistById(id),
         favoritedGistById: async (_, { id }) => {
             const gist = await prisma().favorite.findUnique({ where: { gistId: id } });
             return gist;
+        },
+        favorites: async (_, { id }) => {
+            const favorites = await prisma().favorite.findMany({ where: { favorited: true } });
+            return favorites;
         },
     },
     Mutation: {

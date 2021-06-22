@@ -1,11 +1,15 @@
-import { makeStyles, createStyles, Typography } from '@material-ui/core';
-import { ReactElement } from 'react';
+import { makeStyles, createStyles, Typography, AppBar, Toolbar, Link as MUILink, Container } from '@material-ui/core';
+import React, { ReactElement } from 'react';
 import Head from 'next/head';
-
+import Link from 'next/link';
 const useStyles = makeStyles(() =>
     createStyles({
         header: {
-            padding: '1em 2em',
+            // padding: '1em 2em',
+        },
+        link: {
+            paddingRight: '1em',
+            cursor: 'pointer',
         },
     })
 );
@@ -23,12 +27,23 @@ const Layout = ({ children, title }: LayoutProps): ReactElement => {
             <Head>
                 <title>{title}</title>
             </Head>
-            <header className={classes.header}>
-                <Typography variant="h4" component="h1" gutterBottom>
-                    Next.js example
-                </Typography>
-            </header>
-            <main>{children}</main>
+            <AppBar position="static" color="secondary">
+                <Toolbar>
+                    <Link href="/" passHref>
+                        <MUILink variant="h4" component="h1" className={classes.link}>
+                            Github Gists
+                        </MUILink>
+                    </Link>
+                    <Link href="/favorites" passHref>
+                        <MUILink variant="h5" component="h2" className={classes.link}>
+                            Favorites
+                        </MUILink>
+                    </Link>
+                </Toolbar>
+            </AppBar>
+            <main>
+                <Container maxWidth="md">{children}</Container>
+            </main>
         </>
     );
 };
