@@ -4,11 +4,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import { Tool, tools } from '../../lib/tools';
-import { ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 import Layout from '../../components/layout';
 import { gql } from '@apollo/client';
 import { useGistByIdQuery } from '../../gen/graphql-types';
 import { useRouter } from 'next/router';
+import FileTable from '../../components/table/FileTable';
 
 const useStyles = makeStyles((theme: Theme) => ({
     description: {
@@ -64,16 +65,7 @@ export default function Gist(): ReactElement {
                         </Breadcrumbs>
                     </Grid>
                     <Grid item xs={12} container justify="center" alignItems="center">
-                        {/* NextJS Image optimization example. Props are src(any file under the public dir), width, and height */}
-                        {/* {tool.image && <Image {...tool.image} data-testid="image" aria-hidden="true" />}
-                        <Typography variant="h2" className={classes.title}>
-                            {tool.name}
-                        </Typography> */}
-                    </Grid>
-                    <Grid item xs={12} container justify="center">
-                        {/* <Typography variant="body1" className={classes.description}>
-                            {tool.description}
-                        </Typography> */}
+                        <FileTable files={data?.gistsById?.files} />
                     </Grid>
                     <Grid item xs={12} container justify="center">
                         <Button variant="contained" href={data?.gistsById?.html_url} color="primary">

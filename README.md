@@ -59,9 +59,9 @@ Requirements by page
 
 ### Gist detail page
 
--   [ ] List all files of the gist
+-   [x] List all files of the gist
 -   [ ] Button/Icon to toggle favoriting/unfavoriting a gist
--   [ ] Breadcrumb/Nav to return to home page
+-   [x] Breadcrumb/Nav to return to home page
 -   [ ] Nav with homepage and favorited gists
 
 ## Assumptions made
