@@ -42,8 +42,8 @@ Prequisites
 
 ## API Requirements
 
--   [ ] Query gists (username)
--   [ ] Query gist (ID)
+-   [x] Query gists (username)
+-   [x] Query gist (ID)
 -   [ ] Mutation favorite a gist (ID)
 -   [ ] Query favorited gists
 
@@ -53,8 +53,8 @@ Requirements by page
 
 ### Home page
 
--   [ ] Text box to enter username
--   [ ] Debounced username search to list public gists (description and date at minimum)
+-   [x] Text box to enter username
+-   [x] Debounced username search to list public gists (description and date at minimum)
 -   [ ] Navigate to gist detail page after clicking a public gist
 
 ### Gist detail page

@@ -17,18 +17,18 @@ const typeDefs = gql`
     }
 
     type Gist {
-        url: String
-        id: String
-        created_at: String
-        updated_at: String
-        forks_url: String
-        commits_url: String
-        node_id: String
-        git_pull_url: String
-        git_push_url: String
-        html_url: String
+        url: String!
+        id: String!
+        created_at: String!
+        updated_at: String!
+        forks_url: String!
+        commits_url: String!
+        node_id: String!
+        git_pull_url: String!
+        git_push_url: String!
+        html_url: String!
         public: Boolean
-        description: String
+        description: String!
         comments: Int
         user: String
         comments_url: String
