@@ -9,7 +9,8 @@ import {
     TableHead,
     TableRow,
 } from '@material-ui/core';
-import React, { Props, ReactElement } from 'react';
+import React, { ReactElement } from 'react';
+import { File } from '../../gen/graphql-types';
 
 const useStyles = makeStyles({
     table: {
@@ -18,17 +19,10 @@ const useStyles = makeStyles({
 });
 
 interface Props {
-    files?:
-        | {
-              filename: string;
-              type: string;
-              language: string;
-              raw_url: string;
-              size: number;
-          }[];
+    files: Pick<File, 'size' | 'type' | 'filename' | 'language' | 'raw_url'>[] | null | undefined;
 }
 
-export default function FileTable({ files = [] }: Props): ReactElement {
+export default function FileTable({ files }: Props): ReactElement {
     const classes = useStyles();
 
     return (
@@ -44,15 +38,13 @@ export default function FileTable({ files = [] }: Props): ReactElement {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {files.map(({ filename, language, raw_url, size, type }) => (
+                    {files?.map(({ filename, language, raw_url, size, type }) => (
                         <TableRow key={filename}>
                             <TableCell component="th" scope="row">
                                 {filename}
                             </TableCell>
                             <TableCell align="right">{language}</TableCell>
-                            <TableCell align="right">
-                                <Link href={raw_url}>Link</Link>
-                            </TableCell>
+                            <TableCell align="right">{raw_url && <Link href={raw_url}>Link</Link>}</TableCell>
                             <TableCell align="right">{size}</TableCell>
                             <TableCell align="right">{type}</TableCell>
                         </TableRow>

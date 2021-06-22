@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next';
 import { makeStyles, createStyles, Typography, Theme, List, Grid, TextField } from '@material-ui/core';
 import Layout from '../components/layout';
-import ListItem, { Link } from '../components/list/ListItem';
+import ListItem from '../components/list/ListItem';
 import debounce from 'lodash.debounce';
 import { gql } from '@apollo/client';
 
@@ -32,7 +32,7 @@ interface Props {
     tools: { name: string; image?: Image }[];
 }
 
-const queryGistsByUsername = gql`
+export const queryGistsByUsername = gql`
     query GistsByUsername($username: String!) {
         gistsByUsername(username: $username) {
             id

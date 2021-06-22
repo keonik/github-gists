@@ -1,4 +1,4 @@
-import { makeStyles, createStyles, Typography, AppBar, Toolbar, Link as MUILink, Container } from '@material-ui/core';
+import { makeStyles, createStyles, AppBar, Toolbar, Link as MUILink, Container } from '@material-ui/core';
 import React, { ReactElement } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';

@@ -1,8 +1,5 @@
-import Image from '../Image';
 import {
     ListItem as MUIListItem,
-    ListItemAvatar,
-    Avatar,
     ListItemText,
     Grid,
     Typography,

@@ -1,9 +1,6 @@
 import { Button, Grid, IconButton, makeStyles, Theme, Typography } from '@material-ui/core';
-import { GetStaticProps } from 'next';
 import Link from 'next/link';
-import Image from 'next/image';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import { Tool, tools } from '../../lib/tools';
 import React, { ReactElement } from 'react';
 import Layout from '../../components/layout';
 import { gql } from '@apollo/client';
@@ -12,6 +9,7 @@ import { useRouter } from 'next/router';
 import FileTable from '../../components/table/FileTable';
 import { MdFavorite, MdFavoriteBorder } from 'react-icons/md';
 import { FavoritesQuery } from '../favorites';
+
 const useStyles = makeStyles((theme: Theme) => ({
     description: {
         maxWidth: '80ch',
@@ -24,10 +22,6 @@ const useStyles = makeStyles((theme: Theme) => ({
         color: theme.palette.secondary.dark,
     },
 }));
-
-interface Props {
-    tool?: Tool;
-}
 
 export const queryGistById = gql`
     query GistById($id: String!) {
@@ -97,7 +91,10 @@ export default function Gist(): ReactElement {
                         </Typography>
                     )}
                     <Grid item xs={12} container justify="center" alignItems="center">
-                        <FileTable files={data?.gistsById?.files} />
+                        <FileTable
+                            // @ts-ignore
+                            files={data?.gistsById?.files || []}
+                        />
                     </Grid>
                     <Grid item xs={12} container justify="center">
                         <Button variant="contained" href={data?.gistsById?.html_url} color="primary">
