@@ -25,6 +25,7 @@ const typeDefs = gql`
     type Favorite {
         gistId: String!
         favorited: Boolean!
+        gist: Gist
     }
 
     type Gist {
@@ -46,6 +47,7 @@ const typeDefs = gql`
         owner: Owner
         truncated: Boolean
         files: [File]
+        favorite: Favorite
     }
 
     type Owner {
@@ -80,20 +82,35 @@ const typeDefs = gql`
 
 const resolvers = {
     Query: {
-        gistsByUsername: (_, { username }, { dataSources }) =>
-            dataSources.githubAPI.getGistsByUser(`${username}`.toLowerCase()),
-        gistsById: (_, { id }, { dataSources }) => dataSources.githubAPI.getGistById(id),
-        favoritedGistById: async (_, { id }) => {
-            const gist = await prisma().favorite.findUnique({ where: { gistId: id } });
-            return gist;
+        gistsByUsername: async (_, { username }, { dataSources }) => {
+            const gists = await dataSources.githubAPI.getGistsByUser(`${username}`.toLowerCase());
+            return gists.map(async (gist) => ({
+                ...gist,
+                favorite: await prisma().favorite.findUnique({ where: { gistId: gist.id } }),
+            }));
         },
-        favorites: async (_, { id }) => {
+        gistsById: async (_, { id }, { dataSources }) => {
+            const gist = dataSources.githubAPI.getGistById(id);
+
+            return { ...gist, favorite: await prisma().favorite.findUnique({ where: { gistId: gist.id } }) };
+        },
+        favoritedGistById: async (_, { id }, { dataSources }) => {
+            const favorite = await prisma().favorite.findUnique({ where: { gistId: id } });
+            favorite.gist = await dataSources.githubAPI.getGistById(favorite.gistId);
+            return favorite;
+        },
+        favorites: async (_, __, { dataSources }) => {
             const favorites = await prisma().favorite.findMany({ where: { favorited: true } });
-            return favorites;
+
+            // n + 1 :(
+            return favorites.map(async (favorite) => ({
+                ...favorite,
+                gist: await dataSources.githubAPI.getGistById(favorite.gistId),
+            }));
         },
     },
     Mutation: {
-        favoriteGist: async (_, { gistId, favorited }, { dataSources }) => {
+        favoriteGist: async (_, { gistId, favorited }) => {
             // update or insert into db
             const gist = await prisma().favorite.upsert({
                 where: {

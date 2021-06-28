@@ -26,6 +26,7 @@ export type Favorite = {
   __typename?: 'Favorite';
   gistId: Scalars['String'];
   favorited: Scalars['Boolean'];
+  gist?: Maybe<Gist>;
 };
 
 export type File = {
@@ -57,6 +58,7 @@ export type Gist = {
   owner?: Maybe<Owner>;
   truncated?: Maybe<Scalars['Boolean']>;
   files?: Maybe<Array<Maybe<File>>>;
+  favorite?: Maybe<Favorite>;
 };
 
 export type Mutation = {
@@ -124,6 +126,10 @@ export type FavoritesQuery = (
   & { favorites?: Maybe<Array<(
     { __typename?: 'Favorite' }
     & Pick<Favorite, 'gistId'>
+    & { gist?: Maybe<(
+      { __typename?: 'Gist' }
+      & Pick<Gist, 'created_at' | 'updated_at' | 'description' | 'html_url'>
+    )> }
   )>> }
 );
 
@@ -140,10 +146,10 @@ export type GistByIdQuery = (
     & { files?: Maybe<Array<Maybe<(
       { __typename?: 'File' }
       & Pick<File, 'filename' | 'type' | 'language' | 'raw_url' | 'size'>
-    )>>> }
-  )>, favoritedGistById?: Maybe<(
-    { __typename?: 'Favorite' }
-    & Pick<Favorite, 'favorited'>
+    )>>>, favorite?: Maybe<(
+      { __typename?: 'Favorite' }
+      & Pick<Favorite, 'gistId'>
+    )> }
   )> }
 );
 
@@ -171,6 +177,10 @@ export type GistsByUsernameQuery = (
   & { gistsByUsername?: Maybe<Array<Maybe<(
     { __typename?: 'Gist' }
     & Pick<Gist, 'id' | 'description' | 'created_at' | 'updated_at'>
+    & { favorite?: Maybe<(
+      { __typename?: 'Favorite' }
+      & Pick<Favorite, 'gistId'>
+    )> }
   )>>> }
 );
 
@@ -179,6 +189,12 @@ export const FavoritesDocument = gql`
     query Favorites {
   favorites {
     gistId
+    gist {
+      created_at
+      updated_at
+      description
+      html_url
+    }
   }
 }
     `;
@@ -223,9 +239,9 @@ export const GistByIdDocument = gql`
       raw_url
       size
     }
-  }
-  favoritedGistById(id: $id) {
-    favorited
+    favorite {
+      gistId
+    }
   }
 }
     `;
@@ -299,6 +315,9 @@ export const GistsByUsernameDocument = gql`
     description
     created_at
     updated_at
+    favorite {
+      gistId
+    }
   }
 }
     `;

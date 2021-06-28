@@ -37,9 +37,9 @@ export const queryGistById = gql`
                 raw_url
                 size
             }
-        }
-        favoritedGistById(id: $id) {
-            favorited
+            favorite {
+                gistId
+            }
         }
     }
 `;

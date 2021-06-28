@@ -9,6 +9,12 @@ export const FavoritesQuery = gql`
     query Favorites {
         favorites {
             gistId
+            gist {
+                created_at
+                updated_at
+                description
+                html_url
+            }
         }
     }
 `;

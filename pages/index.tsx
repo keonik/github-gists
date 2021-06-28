@@ -39,6 +39,9 @@ export const queryGistsByUsername = gql`
             description
             created_at
             updated_at
+            favorite {
+                gistId
+            }
         }
     }
 `;
@@ -57,7 +60,7 @@ export default function Home({ tools }: Props) {
 
     return (
         <>
-            <Layout title="Next.js example">
+            <Layout title="Github Gist Search">
                 <Grid container spacing={4} direction="column" className={classes.root}>
                     <Grid item container spacing={4} direction="column" xs={12} alignItems="center">
                         <Grid container item alignContent="stretch" justify="center" direction="column">

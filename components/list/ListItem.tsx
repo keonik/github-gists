@@ -9,6 +9,9 @@ import {
 } from '@material-ui/core';
 import Link from '../link/Link';
 import dayjs from 'dayjs';
+import React from 'react';
+import { MdFavorite, MdFavoriteBorder } from 'react-icons/md';
+import { Favorite, Maybe } from '../../gen/graphql-types';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -33,9 +36,11 @@ type Props = {
     description: string;
     created_at: string;
     updated_at: string;
+    favorite?: Maybe<{ __typename?: 'Favorite' | undefined } & Pick<Favorite, 'gistId'>> | undefined;
+    key: string;
 };
 
-export default function ListItem({ id, description, created_at, updated_at }: Props) {
+export default function ListItem({ id, description, created_at, updated_at, favorite }: Props) {
     const classes = useStyles();
     const link = { href: '/gist/[id]', as: `/gist/${id}`, label: 'Learn More' };
     return (
@@ -55,8 +60,20 @@ export default function ListItem({ id, description, created_at, updated_at }: Pr
                         {dayjs(updated_at).format('MMM DD, YYYY')}
                     </Typography>
                 </ListItemText>
-                <Grid container item xs={12} md={3} className={classes.info} justify="flex-end" alignItems="center">
-                    <Link {...link} />
+                <Grid
+                    container
+                    item
+                    xs={12}
+                    md={3}
+                    className={classes.info}
+                    justify="flex-end"
+                    alignItems="center"
+                    spacing={2}
+                >
+                    <Grid>
+                        <Link {...link} />
+                    </Grid>
+                    <Grid>{favorite ? <MdFavorite /> : <MdFavoriteBorder />}</Grid>
                 </Grid>
             </Grid>
         </MUIListItem>

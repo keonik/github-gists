@@ -9,6 +9,7 @@ describe('Home page', () => {
             </Layout>
         );
         // header
-        expect(screen.getByRole('heading', { name: 'Next.js example' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Github Gists' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Favorites' })).toBeInTheDocument();
     });
 });
